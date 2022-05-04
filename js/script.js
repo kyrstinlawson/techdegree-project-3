@@ -4,6 +4,8 @@ let otherJobField = document.getElementById("other-job-role");
 let shirtColor = document.getElementById("color");
 let shirtDesign = document.getElementById("design");
 let shirtOptions = shirtColor.children;
+let activities = document.getElementById("activities");
+let displayCost = document.getElementById("activities-cost");
 
 
 // Focuses on name field on load
@@ -38,3 +40,16 @@ shirtDesign.addEventListener("change", (e) => {
         }
     }
 })
+
+// Updates cost for activites based on selections
+let totalCost = 0;
+activities.addEventListener("change", (e) => {
+    let activityCost = +e.target.getAttribute("data-cost");
+    if (e.target.checked) {
+        totalCost += activityCost;
+    } else {
+        totalCost -= activityCost;
+    } 
+    displayCost.innerHTML = `Total: $${totalCost}`;
+});
+
