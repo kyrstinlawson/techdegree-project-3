@@ -1,4 +1,8 @@
 let nameField = document.getElementById("name");
+let emailField = document.getElementById("email");
+let ccNumField = document.getElementById("cc-num");
+let zipField = document.getElementById("zip");
+let cvvField = document.getElementById("cvv");
 let jobSelect = document.getElementById("title");
 let otherJobField = document.getElementById("other-job-role");
 let shirtColor = document.getElementById("color");
@@ -10,6 +14,10 @@ let paymentOption = document.getElementById("payment");
 let creditCard = document.getElementById("credit-card");
 let paypal = document.getElementById("paypal");
 let bitcoin = document.getElementById("bitcoin");
+let form = document.querySelector("form");
+let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+console.log(checkboxes);
 
 // Focuses on name field on load
 nameField.focus();
@@ -77,3 +85,54 @@ paymentOption.addEventListener("change", (e) => {
         creditCard.hidden = false;
     }
 });
+
+// Below set of functions tests each required field to make sure the input is valid
+function isNameValid() {
+    let name = nameField.value;
+    return regexName = /\w+/.test(name);
+};
+function isEmailValid() {
+    let email = emailField.value;
+    return regexEmail = /[^@]+@[^@.]+\.com$/i.test(email);
+};
+function isActivityChecked() {
+    if (totalCost === 0) {
+        return false;
+    } else {
+        return true;
+    }
+};
+function isCCNumValid() {
+    let ccNum = ccNumField.value;
+    return regexCCNum = /^\d{13,16}$/.test(ccNum);
+};
+function isZipValid() {
+    let zip = zipField.value;
+    return regexZip = /^\d{5}$/.test(zip);
+};
+function isCVVValid() {
+    let cvv = cvvField.value;
+    return regexCVV = /^\d{3}$/.test(cvv);
+};
+
+// Checks if all fields are valid on submit
+form.addEventListener("submit", (e) => {
+    if (paymentOption.children[1].selected === true) {
+        if (!isCCNumValid() || !isZipValid() || !isCVVValid()) {
+            e.preventDefault();
+        };
+    };
+    if (!isNameValid() || !isEmailValid() || !isActivityChecked()) {
+        e.preventDefault();
+    }
+});
+
+// Focuses on checkbox elements depending on which one is selected when tabbing
+for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener("focus", (e) => {
+        checkboxes[i].parentNode.classList.add("focus");
+    });
+    checkboxes[i].addEventListener("blur", (e) => {
+        checkboxes[i].parentNode.classList.remove("focus");
+    });
+};
