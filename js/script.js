@@ -17,6 +17,7 @@ let bitcoin = document.getElementById("bitcoin");
 let form = document.querySelector("form");
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let activityOptions = document.getElementById("activities-box");
+let emailHint = document.getElementById("email-hint");
 
 // Focuses on name field on load
 nameField.focus();
@@ -166,7 +167,15 @@ form.addEventListener("submit", (e) => {
     }
     if (!isEmailValid()) {
         e.preventDefault();
+        let email = emailField.value
         notValid(emailField);
+        if (email === "") {
+            emailHint.textContent = `Email field is empty, please enter email address`;
+        } else if (/^\w+@\w+.\w+$/.test(email) === false) {
+            emailHint.textContent = `Email address is missing "@" symbol`;
+        } else {
+            emailHint.textContent = "Email address must be formatted correctly";
+        }
     } else {
         isValid(emailField);
     }
