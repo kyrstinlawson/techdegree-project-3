@@ -17,8 +17,6 @@ let bitcoin = document.getElementById("bitcoin");
 let form = document.querySelector("form");
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
-console.log(checkboxes);
-
 // Focuses on name field on load
 nameField.focus();
 // Hides "other job" field on load
@@ -115,15 +113,58 @@ function isCVVValid() {
     return regexCVV = /^\d{3}$/.test(cvv);
 };
 
-// Checks if all fields are valid on submit
+// shows error message when there is missing information
+function notValid(field) {
+    field.parentNode.classList.add("not-valid");
+    field.parentNode.classList.remove("valid");
+    field.parentNode.lastElementChild.style.display = "inherit";
+}
+// removes error message when fixed
+function isValid(field) {
+    field.parentNode.classList.add("valid");
+    field.parentNode.classList.remove("not-valid");
+    field.parentNode.lastElementChild.style.display = "none";
+}
+
+// Checks if all fields are valid on submit and provides error messages for missing information
 form.addEventListener("submit", (e) => {
     if (paymentOption.children[1].selected === true) {
-        if (!isCCNumValid() || !isZipValid() || !isCVVValid()) {
+        if (!isCCNumValid()) {
             e.preventDefault();
+            notValid(ccNumField);
+        } else {
+            isValid(ccNumField);
+        };
+        if (!isZipValid()) {
+            e.preventDefault();
+            notValid(zipField);
+        } else {
+            isValid(zipField);
+        };
+        if (!isCVVValid()) {
+            e.preventDefault();
+            notValid(cvvField);
+        } else {
+            isValid(cvvField);
         };
     };
-    if (!isNameValid() || !isEmailValid() || !isActivityChecked()) {
+    if (!isNameValid()) {
         e.preventDefault();
+        notValid(nameField);
+    } else {
+        isValid(nameField);
+    }
+    if (!isEmailValid()) {
+        e.preventDefault();
+        notValid(emailField);
+    } else {
+        isValid(emailField);
+    }
+    if (!isActivityChecked()) {
+        e.preventDefault();
+        notValid(activities);
+    } else {
+        isValid(activities);
     }
 });
 
