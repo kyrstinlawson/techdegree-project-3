@@ -33,7 +33,7 @@ jobSelect.addEventListener("change", (e) => {
     }
 });
 
-// Hides color options
+// Hides color options on load
 shirtColor.disabled = true;
 
 // Shows only the shirt colors that are available for the selected design
