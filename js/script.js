@@ -16,6 +16,7 @@ let paypal = document.getElementById("paypal");
 let bitcoin = document.getElementById("bitcoin");
 let form = document.querySelector("form");
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+let activityOptions = document.getElementById("activities-box");
 
 // Focuses on name field on load
 nameField.focus();
@@ -61,6 +62,26 @@ activities.addEventListener("change", (e) => {
     } 
     displayCost.innerHTML = `Total: $${totalCost}`;
 });
+
+// Disables conflicting classes so user cannot select both
+activities.addEventListener("change", (e) => {
+    for (let i = 0; i < activityOptions.children.length; i++) {
+        if (e.target.getAttribute("data-day-and-time") === activityOptions.children[i].children[2].textContent) {
+            if (e.target.checked) {
+                activityOptions.children[i].classList.add("disabled");
+                activityOptions.children[i].children[0].disabled = true;
+                e.target.parentNode.classList.remove("disabled");
+                e.target.disabled = false;
+            } else {
+                activityOptions.children[i].classList.remove("disabled");
+                activityOptions.children[i].children[0].disabled = false;
+            }
+        }
+        }
+})
+
+// if selected check time is equal to other time
+// for all activity 
 
 // Hides paypal and bitcoin options on load and selects the credit card option
 paypal.hidden = true;
@@ -126,8 +147,35 @@ function isValid(field) {
     field.parentNode.lastElementChild.style.display = "none";
 }
 
+// Makes sure name is valid as typed
+form.addEventListener("keyup", (e) => {
+    if (!isNameValid()) {
+        e.preventDefault();
+        notValid(nameField);
+    } else {
+        isValid(nameField);
+    }
+});
 // Checks if all fields are valid on submit and provides error messages for missing information
 form.addEventListener("submit", (e) => {
+    if (!isNameValid()) {
+        e.preventDefault();
+        notValid(nameField);
+    } else {
+        isValid(nameField);
+    }
+    if (!isEmailValid()) {
+        e.preventDefault();
+        notValid(emailField);
+    } else {
+        isValid(emailField);
+    }
+    if (!isActivityChecked()) {
+        e.preventDefault();
+        notValid(activityOptions);
+    } else {
+        isValid(activityOptions);
+    }
     if (paymentOption.children[1].selected === true) {
         if (!isCCNumValid()) {
             e.preventDefault();
@@ -147,24 +195,6 @@ form.addEventListener("submit", (e) => {
         } else {
             isValid(cvvField);
         };
-    };
-    if (!isNameValid()) {
-        e.preventDefault();
-        notValid(nameField);
-    } else {
-        isValid(nameField);
-    }
-    if (!isEmailValid()) {
-        e.preventDefault();
-        notValid(emailField);
-    } else {
-        isValid(emailField);
-    }
-    if (!isActivityChecked()) {
-        e.preventDefault();
-        notValid(activities);
-    } else {
-        isValid(activities);
     }
 });
 
